@@ -1,9 +1,10 @@
 package com.eduardo.ekki.ekkiTransfer.service;
 
 import com.eduardo.ekki.ekkiTransfer.domain.Account;
+import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 public interface TransferService {
 	
-	public void transferCash(Account source, Account recipient);
+	public TransferResult transferCash(Account source, Account recipient);
 
 }
