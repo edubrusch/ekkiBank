@@ -12,7 +12,7 @@ import lombok.Data;
 public class Favoured {	
 	
 	@Id	
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idFavoured;
 	
 	private String name;
@@ -21,7 +21,7 @@ public class Favoured {
 	
 	private String bank;
 	
-	private String acount;
+	private String acountNumber;
 
 
 }

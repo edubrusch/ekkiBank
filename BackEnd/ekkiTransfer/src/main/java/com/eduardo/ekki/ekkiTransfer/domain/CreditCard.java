@@ -12,16 +12,18 @@ import lombok.Data;
 public class CreditCard {
 	
 	@Id	
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idCreditCard;
 	
 	private String serial;
+	
+	private String titularName;
 	
 	private int CVV;
 	
 	private String dueDate ;
 	
-	private String acount;
+	private String acountNumber;
 	
 
 }
