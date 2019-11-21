@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eduardo.ekki.ekkiTransfer.service.impl.AccountBalanceServiceImpl;
@@ -21,8 +22,8 @@ public class TransferControllerImpl implements TransferController {
 	}
 
 	@Override
-	@GetMapping(value = "/balance/{accountID}")
-	public ResponseEntity<AccountBalanceResult> accountBalance(String accountID) {
+	@GetMapping(value = "/balance/{id}")
+	public ResponseEntity<AccountBalanceResult> accountBalance(@PathVariable("id") long accountID) {
 		
 		AccountBalanceResult resultAccount = accountBalanceService.accountBalance(accountID);		
 		return new ResponseEntity<>(resultAccount, HttpStatus.OK);		

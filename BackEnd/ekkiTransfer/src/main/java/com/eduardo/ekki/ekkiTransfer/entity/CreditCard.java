@@ -1,4 +1,4 @@
-package com.eduardo.ekki.ekkiTransfer.domain;
+package com.eduardo.ekki.ekkiTransfer.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,19 +9,21 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Favoured {	
+public class CreditCard {
 	
 	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idFavoured;
+	private long idCreditCard;
 	
-	private String name;
+	private String serial;
 	
-	private String documentID;
+	private String titularName;
 	
-	private String bank;
+	private int CVV;
+	
+	private String dueDate ;
 	
 	private String acountNumber;
-
+	
 
 }

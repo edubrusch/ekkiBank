@@ -1,4 +1,4 @@
-package com.eduardo.ekki.ekkiTransfer.domain;
+package com.eduardo.ekki.ekkiTransfer.entity;
 
 public enum TransferStatus {
 	

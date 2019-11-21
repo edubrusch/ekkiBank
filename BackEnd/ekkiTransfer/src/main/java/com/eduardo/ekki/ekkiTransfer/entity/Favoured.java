@@ -1,27 +1,27 @@
-package com.eduardo.ekki.ekkiTransfer.domain;
-
-import java.math.BigDecimal;
+package com.eduardo.ekki.ekkiTransfer.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-
 import javax.persistence.Id;
 
 import lombok.Data;
 
 @Entity
 @Data
-public class Account {
+public class Favoured {	
 	
-	@Id
+	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long idAccount;
+	private long idFavoured;
 	
 	private String name;
 	
-	private long accountNumber;
+	private String documentID;
 	
-	private BigDecimal balance;
+	private String bank;
+	
+	private String acountNumber;
+
 
 }

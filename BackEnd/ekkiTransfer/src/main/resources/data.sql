@@ -9,6 +9,9 @@ INSERT INTO credit_card(serial,titular_name,CVV,due_Date,acount_Number) values (
 INSERT INTO credit_card(serial,titular_name,CVV,due_Date,acount_Number) values ('23426365546213154353-62345', 'Joquim Cust B. C.', 223, '09/20', '324232');
 INSERT INTO credit_card(serial,titular_name,CVV,due_Date,acount_Number) values ('08986875865565435443-62354', 'Martha R H N', 947, '08/21', '454336');
 
+INSERT INTO account(name, account_Number, balance) values ('Joana Machado Prado', 526546, 1536.73);
+INSERT INTO account(name, account_Number, balance) values ('Neusa Soares Silva', 524756, 523.07);
+
 COMMIT;
 
 

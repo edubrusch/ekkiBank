@@ -1,4 +1,4 @@
-package com.eduardo.ekki.ekkiTransfer.domain;
+package com.eduardo.ekki.ekkiTransfer.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
