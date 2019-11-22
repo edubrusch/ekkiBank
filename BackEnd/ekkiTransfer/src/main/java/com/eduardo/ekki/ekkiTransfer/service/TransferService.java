@@ -1,10 +1,11 @@
 package com.eduardo.ekki.ekkiTransfer.service;
 
-import com.eduardo.ekki.ekkiTransfer.entity.Account;
+import java.math.BigDecimal;
+
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 public interface TransferService {
 	
-	public TransferResult transferCash(Account source, Account recipient);
+	public TransferResult transferCash(long sourceAccountNumber, long recipientAccountNumber, BigDecimal amount);
 
 }
