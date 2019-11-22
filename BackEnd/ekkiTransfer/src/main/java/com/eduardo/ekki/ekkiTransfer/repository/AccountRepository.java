@@ -1,4 +1,4 @@
-package com.eduardo.ekki.ekkiTransfer.data.repository;
+package com.eduardo.ekki.ekkiTransfer.repository;
 
 import java.util.Optional;
 
