@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-
 import javax.persistence.Id;
 
 import lombok.Data;
@@ -19,8 +18,8 @@ public class Account {
 	private long idAccount;
 	
 	private String name;
-	
-	private long accountNumber;
+		
+	private String accountNumber;
 	
 	private BigDecimal balance;
 

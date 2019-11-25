@@ -20,7 +20,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
 	private AccountBalanceResult output = null;
 	
 	@Override
-	public AccountBalanceResult accountBalance(long accountID) {
+	public AccountBalanceResult accountBalance(String accountID) {
 		
 		Optional<Account> searchResult = accountRepository.findAccountByAccountNumber(accountID);		
 		

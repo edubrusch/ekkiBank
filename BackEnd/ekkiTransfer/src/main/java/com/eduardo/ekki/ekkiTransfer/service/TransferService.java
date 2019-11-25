@@ -6,6 +6,6 @@ import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 public interface TransferService {
 	
-	public TransferResult transferCash(long sourceAccountNumber, long recipientAccountNumber, BigDecimal amount);
+	public TransferResult transferCash(String sourceAccountNumber, String recipientAccountNumber, BigDecimal amount);	
 
 }

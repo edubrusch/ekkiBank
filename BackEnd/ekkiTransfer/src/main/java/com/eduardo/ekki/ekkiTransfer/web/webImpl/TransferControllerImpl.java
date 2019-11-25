@@ -23,7 +23,7 @@ public class TransferControllerImpl implements TransferController {
 
 	@Override
 	@GetMapping(value = "/balance/{id}")
-	public ResponseEntity<AccountBalanceResult> accountBalance(@PathVariable("id") long accountID) {
+	public ResponseEntity<AccountBalanceResult> accountBalance(@PathVariable("id") String accountID) {
 		
 		AccountBalanceResult resultAccount = accountBalanceService.accountBalance(accountID);		
 		return new ResponseEntity<>(resultAccount, HttpStatus.OK);		

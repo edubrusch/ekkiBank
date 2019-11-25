@@ -9,20 +9,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "transfer_history")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transfer {
 	
 	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long transferID;
 	
-	private int sourceAccount;
+	private String sourceAccount;
 	
-	private int destinationAccount;
+	private String destinationAccount;
 	
 	private BigDecimal amount;
 	

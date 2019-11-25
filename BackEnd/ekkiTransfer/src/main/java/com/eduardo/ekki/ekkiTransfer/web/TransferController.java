@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.eduardo.ekki.ekkiTransfer.service.result.AccountBalanceResult;
 
-public interface TransferController {
+public interface TransferController {	
 
-	ResponseEntity<AccountBalanceResult> accountBalance(long accountID);
+	ResponseEntity<AccountBalanceResult> accountBalance(String accountID);
 
 }

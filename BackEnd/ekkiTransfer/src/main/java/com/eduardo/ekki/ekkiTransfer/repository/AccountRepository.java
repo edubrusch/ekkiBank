@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long>{
+public interface AccountRepository extends JpaRepository<Account, String>{
 	
-	public Optional<Account> findAccountByAccountNumber(long accountNumber);
+	public Optional<Account> findAccountByAccountNumber(String accountNumber);
 
 }

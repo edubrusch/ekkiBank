@@ -15,7 +15,7 @@ public class AccountBalanceResult{
 	
 	private boolean sucess;
 	private String message;
-	private long accountNumber;
+	private String accountNumber;
 	private BigDecimal balance;
 	
 }
