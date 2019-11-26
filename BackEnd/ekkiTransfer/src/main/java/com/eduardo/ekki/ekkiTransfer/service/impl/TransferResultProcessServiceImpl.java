@@ -1,10 +1,13 @@
 package com.eduardo.ekki.ekkiTransfer.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.eduardo.ekki.ekkiTransfer.common.MessageStrings;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
+@Service
 public class TransferResultProcessServiceImpl implements TransferResultProcessService {
 
 	@Override

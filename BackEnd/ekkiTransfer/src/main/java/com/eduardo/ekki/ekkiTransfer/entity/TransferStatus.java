@@ -1,11 +1,9 @@
 package com.eduardo.ekki.ekkiTransfer.entity;
 
 public enum TransferStatus {
-	
-	PENDING,
+		
+	PENDING_CONFIRMATION,
+	CANCELED_OVERRIDEN,	
 	COMPLETED,
-	NOT_COMPLETED_BUSINESS_ERROR,
-	NOT_COMPLETED_UNEXPECTED_ERROR,
-	CANCELED;
 
 }

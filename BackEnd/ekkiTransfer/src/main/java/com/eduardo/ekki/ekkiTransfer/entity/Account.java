@@ -22,5 +22,9 @@ public class Account {
 	private String accountNumber;
 	
 	private BigDecimal balance;
+	
+	private BigDecimal credit;
+	
+	private boolean hasCredit;
 
 }

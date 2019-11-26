@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.service.impl.TransferValidationStatus;
-import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 @Service
-public interface TransferProcessService {
+public interface TransferValidationService {
 	
-	TransferResult processTransferAccount(Account accountSource, Account accountReceipient, BigDecimal amount, TransferValidationStatus transferValidation);
+	TransferValidationStatus validateTransferCash(Account sourceAccount, Account recipientAccount, BigDecimal amount);
 
 }

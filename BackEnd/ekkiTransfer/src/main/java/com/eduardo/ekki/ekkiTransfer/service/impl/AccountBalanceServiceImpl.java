@@ -27,10 +27,10 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
 		searchResult.ifPresentOrElse( accountFound -> {
 			output = AccountBalanceResult.builder()
 				.sucess(true)
-				.accountNumber(accountID)				
+				.accountNumber(accountID)
 				.balance(accountFound.getBalance())
 				.message(String.format(MessageStrings.SUCCESS_ACCOUNT_FOUND.get(), accountID))
-				.build();				
+				.build();
 		}, () -> {
 			output = AccountBalanceResult.builder()
 				.sucess(false)
@@ -38,7 +38,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
 				.message(String.format(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT.get(), accountID))
 				.build();
 			});
-		return output;		
+		return output;
 	}
 	
 }

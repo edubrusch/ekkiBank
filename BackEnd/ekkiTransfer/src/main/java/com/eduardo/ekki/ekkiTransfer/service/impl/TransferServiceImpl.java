@@ -12,6 +12,7 @@ import com.eduardo.ekki.ekkiTransfer.repository.AccountRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferService;
+import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 @Service
@@ -21,10 +22,11 @@ public class TransferServiceImpl implements TransferService{
 	@Autowired
 	private AccountRepository accountRepository;
 	@Autowired
+	private TransferValidationService transferValidation;
+	@Autowired
 	private TransferProcessService transferProcess;
 	@Autowired
 	private TransferResultProcessService transferResult;
-
 
 	@Override
 	public TransferResult transferCash(String sourceAccountNumber, String recipientAccountNumber, BigDecimal amount) {
@@ -33,11 +35,15 @@ public class TransferServiceImpl implements TransferService{
 		Optional<Account> recipientAccount = accountRepository.findAccountByAccountNumber(recipientAccountNumber);
 		
 		sourceAccount.ifPresentOrElse(SourceAccountFound -> {
-			recipientAccount.ifPresentOrElse(recipientAccountFound -> {			
-				TransferValidationStatus isTransferOK = transferProcess.validateTransferCash(sourceAccount.get(), recipientAccount.get(), amount);
+			
+			recipientAccount.ifPresentOrElse(recipientAccountFound -> {
+				
+				TransferValidationStatus isTransferOK = transferValidation.validateTransferCash(sourceAccount.get(), recipientAccount.get(), amount);				
 				output = transferProcess.processTransferAccount(sourceAccount.get(), recipientAccount.get(), amount, isTransferOK);
-			}, () -> {output = transferResult.getFailureOutput(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT, 
+				
+			}, () -> {output = transferResult.getFailureOutput(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT,					
 					MessageStrings.ERROR_TRANSFER_RECIPIENT_ACCOUNT_NOT_FOUND, recipientAccountNumber);});
+			
 		}, () -> {output = transferResult.getFailureOutput(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT,
 				MessageStrings.ERROR_TRANSFER_SOURCE_ACCOUNT_NOT_FOUND, sourceAccountNumber);});
 		
