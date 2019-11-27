@@ -1,5 +1,6 @@
 package com.eduardo.ekki.ekkiTransfer.repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,13 +12,15 @@ import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 
 public interface TransferRepository extends JpaRepository<Transfer, Query> {	
 
-	@Query("Select t.transferID "
-			+ "from Transfer t "
-			+ "where t.sourceAccount =:source "
-			+ "and t.destinationAccount =:destination "
-			+ "and t.transferDate < CURRENT_TIMESTAMP")
+	@Query("Select t.transferID"
+			+ " from Transfer t"
+			+ " where t.sourceAccount =:source"
+			+ " and t.destinationAccount =:destination"
+			+ " and t.transferDate < :date"
+			+ " order by t.transferDate desc")
 	public Optional<Transfer> find(
 			@Param("source") String sourceAccount,
-			@Param("destination") String recipientAccount);
+			@Param("destination") String recipientAccount,
+			@Param("date") LocalDateTime date);
 	
 }

@@ -1,7 +1,7 @@
 package com.eduardo.ekki.ekkiTransfer.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,6 +34,6 @@ public class Transfer {
 	
 	private TransferStatus status;
 	
-	private Date transferDate;
+	private LocalDateTime transferDate;
 
 }

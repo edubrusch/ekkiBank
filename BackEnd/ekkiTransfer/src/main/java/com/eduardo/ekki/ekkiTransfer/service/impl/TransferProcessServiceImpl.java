@@ -1,7 +1,7 @@
 package com.eduardo.ekki.ekkiTransfer.service.impl;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,7 +67,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		.destinationAccount(accountReceipient.getAccountNumber())
 		.amount(amount)
 		.status(TransferStatus.COMPLETED)
-		.transferDate(new Date())
+		.transferDate(LocalDateTime.now())
 		.build();
 		
 		accountRepository.save(accountSource);
@@ -78,16 +78,29 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 	}
 
 	private TransferResult overrideTransfer(Account accountSource, Account accountReceipient, BigDecimal amount) {
-		// TODO Auto-generated method stub
-		return null;
+		BigDecimal amountFinalSource = accountSource.getBalance().subtract(amount);
+		BigDecimal amountFinalReceipient = accountReceipient.getBalance().add(amount);
+		
+		accountSource.setBalance(amountFinalSource);
+		accountReceipient.setBalance(amountFinalReceipient);
+		
+		Transfer transfer = Transfer
+		.builder()
+		.sourceAccount(accountSource.getAccountNumber())
+		.destinationAccount(accountReceipient.getAccountNumber())
+		.amount(amount)
+		.status(TransferStatus.COMPLETED)
+		.transferDate(LocalDateTime.now())
+		.build();
+		
+		accountRepository.save(accountSource);
+		accountRepository.save(accountSource);
+		transferRepository.save(transfer);
+		
+		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
 	}
 
 	private TransferResult createTransferRequirePassword(Account accountSource, Account accountReceipient, BigDecimal amount) {
-//		BigDecimal amountFinalSource = accountSource.getBalance().subtract(amount);
-//		BigDecimal amountFinalReceipient = accountReceipient.getBalance().add(amount);
-//		
-//		accountSource.setBalance(amountFinalSource);
-//		accountReceipient.setBalance(amountFinalReceipient);
 		
 		Transfer transfer = Transfer
 		.builder()		
@@ -95,14 +108,10 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		.destinationAccount(accountReceipient.getAccountNumber())
 		.amount(amount)
 		.status(TransferStatus.PENDING_CONFIRMATION)
-		.transferDate(new Date())
-		.build();
-				
-//		accountRepository.save(accountSource);
-//		accountRepository.save(accountSource);
+		.transferDate(LocalDateTime.now())
+		.build();				
+
 		transferRepository.saveAndFlush(transfer);
-		
-		
 		
 		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
 	}
@@ -130,7 +139,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		.destinationAccount(accountReceipient.getAccountNumber())
 		.amount(amount)
 		.status(TransferStatus.COMPLETED)
-		.transferDate(new Date())
+		.transferDate(LocalDateTime.now())
 		.build();
 				
 		accountRepository.save(accountSource);

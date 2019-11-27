@@ -1,6 +1,8 @@
 package com.eduardo.ekki.ekkiTransfer.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,7 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 			
 		} else {
 			
-			if(transferRepository.find(sourceAccount.getAccountNumber(), recipientAccount.getAccountNumber()).isPresent()) {
+			if(transferRepository.find(sourceAccount.getAccountNumber(), recipientAccount.getAccountNumber(), LocalDateTime.now().minus(2, ChronoUnit.MINUTES)).isPresent()) {
 				status = TransferValidationStatus.APPROVED_OVERRIDE_RECENT_TRANSACTION;
 			} else {
 				if(amount.compareTo(new BigDecimal(1000.0)) > 0) {
