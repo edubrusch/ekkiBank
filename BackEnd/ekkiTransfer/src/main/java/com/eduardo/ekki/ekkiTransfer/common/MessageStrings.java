@@ -9,6 +9,7 @@ public enum MessageStrings {
 	ERROR_TRANSFER_NO_FUNDS("Account %s does not have enough founds for the transfer."),
 	
 	SUCCESS_ACCOUNT_FOUND("Account number %s was found."),
+	SUCCESS_NEEDS_CONFIRMATION("Transfer needs confirmation"),
 	SUCCESS_TRANSFER_ACCOUNT("Transfer success. Transfered from account %s to accont %s value of %s"); 
 	
 	

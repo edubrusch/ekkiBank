@@ -3,11 +3,13 @@ package com.eduardo.ekki.ekkiTransfer.service.impl;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
 
+@Service
 public class TransferValidationServiceImpl implements TransferValidationService {
 	
 	@Autowired
@@ -28,7 +30,7 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 			
 		} else {
 			
-			if(transferRepository.find(amount).size() > 0) {
+			if(transferRepository.find(sourceAccount.getAccountNumber(), recipientAccount.getAccountNumber()).isPresent()) {
 				status = TransferValidationStatus.APPROVED_OVERRIDE_RECENT_TRANSACTION;
 			} else {
 				if(amount.compareTo(new BigDecimal(1000.0)) > 0) {
