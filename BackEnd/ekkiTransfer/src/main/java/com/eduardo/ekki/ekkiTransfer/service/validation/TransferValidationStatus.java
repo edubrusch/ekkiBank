@@ -1,4 +1,4 @@
-package com.eduardo.ekki.ekkiTransfer.service.impl;
+package com.eduardo.ekki.ekkiTransfer.service.validation;
 
 public enum TransferValidationStatus {
 	
@@ -6,6 +6,8 @@ public enum TransferValidationStatus {
 	APPROVED_NEEDS_PASSWORD,
 	APPROVED_NEEDS_CREDICART_LOAM,
 	APPROVED_OVERRIDE_RECENT_TRANSACTION,
-	NOT_APPROVED_INSUFICIENT_FUNDS;
+	APPROVED_OVERRIDE_NEEDS_PASSWORD,
+	NOT_APPROVED_INSUFICIENT_FUNDS,
+	NOT_APPROVED_NEEDS_CREDITCARD;
 
 }

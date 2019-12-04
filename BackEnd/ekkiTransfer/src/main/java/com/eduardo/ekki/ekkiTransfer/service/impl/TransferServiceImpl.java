@@ -14,6 +14,8 @@ import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
+import com.eduardo.ekki.ekkiTransfer.service.validation.TransferValidationDTO;
+import com.eduardo.ekki.ekkiTransfer.service.validation.TransferValidationStatus;
 
 @Service
 public class TransferServiceImpl implements TransferService{
@@ -40,8 +42,8 @@ public class TransferServiceImpl implements TransferService{
 			
 			recipientAccount.ifPresentOrElse(recipientAccountFound -> {
 				
-				TransferValidationStatus isTransferOK = transferValidation.validateTransferCash(sourceAccount.get(), recipientAccount.get(), amount);				
-				this.output = transferProcess.processTransferAccount(sourceAccount.get(), recipientAccount.get(), amount, isTransferOK);
+				TransferValidationDTO validation =  transferValidation.validateTransferCash(sourceAccount.get(), recipientAccount.get(), amount);				
+				this.output = transferProcess.processTransferAccount(validation);
 				
 			}, () -> {this.output = transferResult.getFailureOutput(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT,					
 					MessageStrings.ERROR_TRANSFER_RECIPIENT_ACCOUNT_NOT_FOUND, recipientAccountNumber);});
