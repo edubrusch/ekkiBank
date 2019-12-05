@@ -25,9 +25,9 @@ public class TransferResultProcessServiceImpl implements TransferResultProcessSe
 	@Override
 	public TransferResult getSuccessfulOutput(MessageStrings reason, Transfer transfer) {
 		
-		String message = String.format(reason.get(), 
-				transfer.getSourceAccount(), 
-				transfer.getDestinationAccount(), 
+		String message = String.format(reason.get(),
+				transfer.getSourceAccount(),
+				transfer.getDestinationAccount(),
 				transfer.getAmount());
 		
 		return TransferResult

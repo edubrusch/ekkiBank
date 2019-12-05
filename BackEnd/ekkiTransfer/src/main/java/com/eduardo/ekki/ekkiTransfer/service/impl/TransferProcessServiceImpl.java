@@ -15,9 +15,8 @@ import com.eduardo.ekki.ekkiTransfer.repository.AccountRepository;
 import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
-import com.eduardo.ekki.ekkiTransfer.service.validation.TransferValidationDTO;
-import com.eduardo.ekki.ekkiTransfer.service.validation.TransferValidationStatus;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
+import com.eduardo.ekki.ekkiTransfer.service.validation.TransferValidationDTO;
 
 @Service
 public class TransferProcessServiceImpl implements TransferProcessService{
@@ -36,134 +35,108 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		this.accountRepository = accountRepository;
 		this.transferRepository = transferRepository;
 		this.transferResultProcess = transferResultProcess;
+	}	
+	
+	@Override
+	@Transactional
+	public TransferResult processTransferHasFunds(TransferValidationDTO transferDTO) {
+		transferAccount(
+				transferDTO.getSourceAccount(), 
+				transferDTO.getRecipientAccount(), 
+				transferDTO.getAmount(),  
+				new BigDecimal(0), 
+				transferDTO.getAmount());
+		
+		Transfer transfer = createTransfer(
+				transferDTO.getSourceAccount(),
+				transferDTO.getRecipientAccount(),
+				transferDTO.getAmount(),
+				TransferStatus.COMPLETED);
+		
+		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
 	}
 	
+	@Override
+	@Transactional
+	public TransferResult processTransferOverrideRecentTransfer(TransferValidationDTO transferDTO) {
+		
+		transferDTO.getPreviousTransfer().setStatus(TransferStatus.CANCELED_OVERRIDEN);		
+		transferRepository.save(transferDTO.getPreviousTransfer());		
+		
+		Transfer transfer = createTransfer(
+				transferDTO.getSourceAccount(), 
+				transferDTO.getRecipientAccount(), 
+				transferDTO.getAmount(), 
+				TransferStatus.COMPLETED);
+		
+		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_OVERRIDE_RECENT_TRANSACTION, transfer);
+	}
+
 
 	@Override
-	public TransferResult processTransferAccount(TransferValidationDTO transferValidation) {
-		
-		switch(transferValidation.getStatus()) {
-		
-		case APPROVED_HAS_FUNDS:
-			return execucuteTransferHasFunds(accountSource, accountReceipient, amount);
-		case APPROVED_NEEDS_CREDICART_LOAM:
-			return executeTransferCreditCardLoam(accountSource, accountReceipient, amount);
-		case APPROVED_NEEDS_PASSWORD:
-			return createTransferRequirePassword(accountSource, accountReceipient, amount);
-		case APPROVED_OVERRIDE_RECENT_TRANSACTION:
-			return overrideTransfer(accountSource, accountReceipient, amount);
-		case NOT_APPROVED_INSUFICIENT_FUNDS:			
-		default:
-			return transferResultProcess.getFailureOutput(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT,
-					MessageStrings.SUCCESS_ACCOUNT_FOUND, accountSource.getAccountNumber());
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
 	@Transactional
-	private TransferResult execucuteTransferHasFunds(Account accountSource, Account accountReceipient, BigDecimal amount) {
-		BigDecimal amountFinalSource = accountSource.getBalance().subtract(amount);
-		BigDecimal amountFinalReceipient = accountReceipient.getBalance().add(amount);
+	public TransferResult processTransferAskForConfirmation(TransferValidationDTO transferDTO) {
 		
-		accountSource.setBalance(amountFinalSource);
-		accountReceipient.setBalance(amountFinalReceipient);
+		Transfer transfer = createTransfer(
+				transferDTO.getSourceAccount(), 
+				transferDTO.getRecipientAccount(), 
+				transferDTO.getAmount(), 
+				TransferStatus.PENDING_CONFIRMATION);
 		
-		Transfer transfer = Transfer
-		.builder()
-		.sourceAccount(accountSource.getAccountNumber())
-		.destinationAccount(accountReceipient.getAccountNumber())
-		.amount(amount)
-		.status(TransferStatus.COMPLETED)
-		.transferDate(LocalDateTime.now())
-		.build();
-		
-		accountRepository.save(accountSource);
-		accountRepository.save(accountReceipient);
-		transferRepository.save(transfer);
-		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
+		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_OVERRIDE_RECENT_TRANSACTION, transfer);
 	}
 
-	private TransferResult overrideTransfer(Account accountSource, Account accountReceipient, BigDecimal amount) {
-	
-				
-		
-		BigDecimal amountFinalSource = accountSource.getBalance().subtract(amount);
-		BigDecimal amountFinalReceipient = accountReceipient.getBalance().add(amount);
-		
-		accountSource.setBalance(amountFinalSource);
-		accountReceipient.setBalance(amountFinalReceipient);
-		
-		Transfer transfer = Transfer
-		.builder()
-		.sourceAccount(accountSource.getAccountNumber())
-		.destinationAccount(accountReceipient.getAccountNumber())
-		.amount(amount)
-		.status(TransferStatus.COMPLETED)
-		.transferDate(LocalDateTime.now())
-		.build();
-		
-		accountRepository.save(accountSource);
-		accountRepository.save(accountSource);
-		transferRepository.save(transfer);
-		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
-	}
 
-	private TransferResult createTransferRequirePassword(Account accountSource, Account accountReceipient, BigDecimal amount) {
-		
-		Transfer transfer = Transfer
-		.builder()		
-		.sourceAccount(accountSource.getAccountNumber())
-		.destinationAccount(accountReceipient.getAccountNumber())
-		.amount(amount)
-		.status(TransferStatus.PENDING_CONFIRMATION)
-		.transferDate(LocalDateTime.now())
-		.build();				
-
-		transferRepository.saveAndFlush(transfer);
-		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
-	}
-
-	private TransferResult executeTransferCreditCardLoam(Account accountSource, Account accountReceipient, BigDecimal amount) {
+	@Override
+	@Transactional
+	public TransferResult processTransferAskForConfirmationAndOverrideRecent(TransferValidationDTO transferDTO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	
+	@Override
+	@Transactional
+	public TransferResult processTransferUseCredit(TransferValidationDTO transferDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 	
 	
 
-	@Transactional
-	private TransferResult execucuteStraightTransfer(Account accountSource, Account accountReceipient, BigDecimal amount) {
-		BigDecimal amountFinalSource = accountSource.getBalance().subtract(amount);
-		BigDecimal amountFinalReceipient = accountReceipient.getBalance().add(amount);
+	private void transferAccount(
+			Account accountSource,
+			Account accountReceipient, 
+			BigDecimal drawFromAccount, 
+			BigDecimal drawFromCredit, 
+			BigDecimal creditRecivingAccount) {
 		
-		accountSource.setBalance(amountFinalSource);
-		accountReceipient.setBalance(amountFinalReceipient);
+		BigDecimal balanceFinalSource = accountSource.getBalance().subtract(drawFromAccount);
+		BigDecimal balanceFinalCreditSource = accountSource.getCredit().subtract(drawFromCredit);
+		BigDecimal balanceFinalReceipient = accountReceipient.getBalance().add(creditRecivingAccount);
 		
-		Transfer transfer = Transfer
-		.builder()		
-		.sourceAccount(accountSource.getAccountNumber())
-		.destinationAccount(accountReceipient.getAccountNumber())
-		.amount(amount)
-		.status(TransferStatus.COMPLETED)
-		.transferDate(LocalDateTime.now())
-		.build();
-				
+		accountSource.setBalance(balanceFinalSource);
+		accountSource.setCredit(balanceFinalCreditSource);
+		accountReceipient.setBalance(balanceFinalReceipient);
 		accountRepository.save(accountSource);
-		accountRepository.save(accountSource);
-		transferRepository.save(transfer);
-		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
+		accountRepository.save(accountReceipient);
 	}
+	
+	
+	private Transfer createTransfer(Account source, Account recipient, BigDecimal amount, TransferStatus status) {
+		Transfer transfer = Transfer
+				.builder()
+				.sourceAccount(source.getAccountNumber())
+				.destinationAccount(recipient.getAccountNumber())
+				.amount(amount)
+				.status(status)
+				.transferDate(LocalDateTime.now())
+				.build();				
+				
+				transferRepository.save(transfer);
+				
+				return transfer;		
+	}
+
 	
 
 }
