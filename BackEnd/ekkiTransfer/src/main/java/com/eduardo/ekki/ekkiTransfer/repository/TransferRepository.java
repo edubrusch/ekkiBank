@@ -13,7 +13,7 @@ import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 
 public interface TransferRepository extends JpaRepository<Transfer, Query> {	
 
-	@Query("Select t.transferID"
+	@Query("Select t"
 			+ " from Transfer t"
 			+ " where t.sourceAccount =:source"
 			+ " and t.destinationAccount =:destination"
@@ -25,5 +25,8 @@ public interface TransferRepository extends JpaRepository<Transfer, Query> {
 			@Param("destination") String recipientAccount,
 			@Param("date") LocalDateTime date,
 			@Param("amount") BigDecimal amount);
+	
+	
+	public Optional<Transfer> findByID(String transferID);
 	
 }

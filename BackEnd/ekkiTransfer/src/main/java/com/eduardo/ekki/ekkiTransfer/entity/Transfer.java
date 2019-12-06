@@ -28,12 +28,18 @@ public class Transfer {
 	
 	private String sourceAccount;
 	
-	private String destinationAccount;
+	private String recipientAccount;
 	
 	private BigDecimal amount;
+	
+	private BigDecimal drawBalance;
+	
+	private BigDecimal drawCredit;
 	
 	private TransferStatus status;
 	
 	private LocalDateTime transferDate;
-
+	
+	private String previousTransferID;
+	
 }

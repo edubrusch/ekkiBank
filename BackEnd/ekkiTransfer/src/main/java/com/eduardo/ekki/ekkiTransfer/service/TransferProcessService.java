@@ -2,21 +2,20 @@ package com.eduardo.ekki.ekkiTransfer.service;
 
 import org.springframework.stereotype.Service;
 
+import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
-import com.eduardo.ekki.ekkiTransfer.service.validation.TransferValidationDTO;
 
 @Service
 public interface TransferProcessService {
 	
-	TransferResult processTransferHasFunds(TransferValidationDTO transferDTO);
+	TransferResult processTransferHasFunds(Transfer transfer);
 	
-	TransferResult processTransferOverrideRecentTransfer(TransferValidationDTO transferDTO);
+	TransferResult processTransferOverrideRecentTransfer(Transfer transfer, Transfer previousTransfer);
 	
-	TransferResult processTransferAskForConfirmation(TransferValidationDTO transferDTO);
+	TransferResult processTransferAskForConfirmation(Transfer transfer);
 	
-	TransferResult processTransferAskForConfirmationAndOverrideRecent(TransferValidationDTO transferDTO);
-
-	TransferResult processTransferUseCredit(TransferValidationDTO transferDTO);
+	TransferResult processTransferAskForConfirmationAndOverrideRecent(Transfer transfer, Transfer previousTransfer);	
 	
+	TransferResult processTransferConfirmation(String transferID);
 	
 }

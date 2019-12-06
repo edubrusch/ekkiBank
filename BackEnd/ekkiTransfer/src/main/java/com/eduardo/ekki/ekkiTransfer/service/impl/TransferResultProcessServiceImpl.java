@@ -27,7 +27,7 @@ public class TransferResultProcessServiceImpl implements TransferResultProcessSe
 		
 		String message = String.format(reason.get(),
 				transfer.getSourceAccount(),
-				transfer.getDestinationAccount(),
+				transfer.getRecipientAccount(),
 				transfer.getAmount());
 		
 		return TransferResult
