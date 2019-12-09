@@ -80,7 +80,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 	@Transactional
 	public TransferResult processTransferConfirmation(String transferID) {
 		
-		Optional<Transfer> transfer = transferRepository.findByID(transferID);
+		Optional<Transfer> transfer = transferRepository.findByTransferID(transferID);
 		
 		if(transfer.isPresent()) {		
 			transfer.get().setStatus(TransferStatus.COMPLETED);
@@ -95,8 +95,8 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 
 	private void transferAccount(Transfer transferData) {
 		
-		Optional<Account> source = accountRepository.findById(transferData.getSourceAccount());
-		Optional<Account> recipient = accountRepository.findById(transferData.getRecipientAccount());			
+		Optional<Account> source = accountRepository.findAccountByAccountNumber(transferData.getSourceAccount());
+		Optional<Account> recipient = accountRepository.findAccountByAccountNumber(transferData.getRecipientAccount());			
 		
 		BigDecimal balanceFinalSource = source.get().getBalance().subtract(transferData.getDrawBalance());
 		BigDecimal balanceFinalCreditSource = source.get().getCredit().subtract(transferData.getDrawCredit());		
@@ -107,6 +107,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		recipient.get().setBalance(balanceFinalReceipient);
 		accountRepository.save(source.get());
 		accountRepository.save(recipient.get());
+		transferRepository.save(transferData);
 	}
 	
 }

@@ -42,7 +42,7 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 		
 		TransferResult outputTransfer = validatefaulureCondition(sourceAccount, recipientAccount, amount);
 		
-		if(!outputTransfer.isSucess()) {
+		if(outputTransfer != null) {
 			return outputTransfer;
 		}
 		
@@ -79,7 +79,7 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 
 	private TransferResult validatefaulureCondition(Account sourceAccount, Account recipientAccount, BigDecimal amount) {
 		
-		TransferResult answer = transferResultProcess.getSuccessfulOutput(null, null);		
+		TransferResult answer = null;		
 		
 			if(sourceAccount.getBalance().compareTo(amount) <= 0) {
 			

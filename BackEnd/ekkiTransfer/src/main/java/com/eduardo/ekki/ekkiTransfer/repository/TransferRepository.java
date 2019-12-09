@@ -6,27 +6,28 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 
 
 public interface TransferRepository extends JpaRepository<Transfer, Query> {	
 
-	@Query("Select t"
-			+ " from Transfer t"
-			+ " where t.sourceAccount =:source"
-			+ " and t.destinationAccount =:destination"
-			+ " and t.amount =:amount"
-			+ " and t.transferDate < :date"
-			+ " order by t.transferDate desc")
+	@Query(value = 
+			"Select t.*"
+			+ " from transfer_history t"	
+			+ " where t.source_account = ?1"
+			+ " and t.recipient_account = ?2"
+			+ " and t.amount = ?4"
+			+ " and t.transfer_date < ?3"
+			+ " order by t.transfer_date desc"
+			, nativeQuery = true)
 	public Optional<Transfer> find(
-			@Param("source") String sourceAccount,
-			@Param("destination") String recipientAccount,
-			@Param("date") LocalDateTime date,
-			@Param("amount") BigDecimal amount);
+			String sourceAccount,
+			String recipientAccount,
+			LocalDateTime date,
+			BigDecimal amount);
 	
 	
-	public Optional<Transfer> findByID(String transferID);
+	public Optional<Transfer> findByTransferID(String transferID);
 	
 }
