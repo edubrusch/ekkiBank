@@ -10,6 +10,6 @@ import com.eduardo.ekki.ekkiTransfer.entity.Account;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, String>{
 	
-	public Optional<Account> findAccountByAccountNumber(String accountNumber);
+	public Optional<Account> findAccountByAccountNumber(long accountNumber);
 
 }

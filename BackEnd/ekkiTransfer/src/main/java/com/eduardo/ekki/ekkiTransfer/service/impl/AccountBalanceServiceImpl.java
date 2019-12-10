@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eduardo.ekki.ekkiTransfer.common.MessageStrings;
+import com.eduardo.ekki.ekkiTransfer.common.MessageStringsEnum;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.repository.AccountRepository;
 import com.eduardo.ekki.ekkiTransfer.service.AccountBalanceService;
@@ -18,7 +18,7 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
 	private AccountRepository accountRepository;
 	
 	@Override
-	public AccountBalanceResult accountBalance(String accountID) {
+	public AccountBalanceResult accountBalance(long accountID) {
 		
 		Optional<Account> searchResult = accountRepository.findAccountByAccountNumber(accountID);		
 		
@@ -27,14 +27,15 @@ public class AccountBalanceServiceImpl implements AccountBalanceService {
 					.sucess(true)
 					.accountNumber(accountID)
 					.balance(searchResult.get().getBalance())
-					.message(String.format(MessageStrings.SUCCESS_ACCOUNT_FOUND.get(), accountID))
+					.credit(searchResult.get().getCredit())
+					.message(String.format(MessageStringsEnum.SUCCESS_ACCOUNT_FOUND.get(), accountID))
 					.build();
 		}
 		
 		return AccountBalanceResult.builder()
 				.sucess(false)
 				.accountNumber(accountID)
-				.message(String.format(MessageStrings.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT.get(), accountID))
+				.message(String.format(MessageStringsEnum.ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT.get(), accountID))
 				.build();
 		
 	}

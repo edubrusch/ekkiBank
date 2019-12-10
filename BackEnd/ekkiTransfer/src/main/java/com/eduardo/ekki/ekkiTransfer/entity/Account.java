@@ -18,19 +18,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Account {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idAccount;
-	
-	private String name;
-		
-	private String accountNumber;
-	
-	private BigDecimal balance;
-	
-	private BigDecimal credit;
-	
-	private boolean hasCredit;
 
+	private String name;
+	
+	private long accountNumber;
+
+	private BigDecimal balance;
+
+	private BigDecimal credit;
+
+	private boolean hasCredit;
+	
 }

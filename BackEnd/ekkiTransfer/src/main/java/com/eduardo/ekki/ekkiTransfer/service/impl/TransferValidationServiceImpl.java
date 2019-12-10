@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eduardo.ekki.ekkiTransfer.common.MessageStrings;
+import com.eduardo.ekki.ekkiTransfer.common.MessageStringsEnum;
 import com.eduardo.ekki.ekkiTransfer.common.TransferResultProcess;
+import com.eduardo.ekki.ekkiTransfer.common.TransferStatusEnum;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer.TransferBuilder;
-import com.eduardo.ekki.ekkiTransfer.entity.TransferStatus;
 import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
@@ -29,12 +29,10 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 	Logger logger = LoggerFactory.getLogger("FILE");
 	
 	@Autowired
-	public TransferValidationServiceImpl(TransferRepository transferRepository,
-			TransferResultProcess transferResultProcess,
-			TransferProcessService transferProcess) {
+	public TransferValidationServiceImpl(TransferRepository transferRepository, TransferProcessService transferProcess) {
 		
 		this.transferRepository = transferRepository;
-		this.transferResultProcess = transferResultProcess;
+		this.transferResultProcess = new TransferResultProcess();
 		this.transferProcess = transferProcess;
 	}	
 
@@ -50,60 +48,61 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 		TransferBuilder transfer = getNewTransfer(sourceAccount, recipientAccount, amount);
 		
 		Optional<Transfer> recentTransfer = transferRepository.find(sourceAccount.getAccountNumber(), 
-				recipientAccount.getAccountNumber(), amount/*, Timestamp.valueOf(LocalDateTime.now().minus(2, ChronoUnit.MINUTES))*/);
+				recipientAccount.getAccountNumber(), amount);
 		
 		if(recentTransfer.isPresent()) {
 			
 			transfer.previousTransferID(String.valueOf(recentTransfer.get().getTransferID()));
 			
 			if(amount.compareTo(new BigDecimal(1000)) > 0) {					
-				transfer.status(TransferStatus.PENDING_CONFIRMATION);
+				transfer.status(TransferStatusEnum.PENDING_CONFIRMATION);
 				return transferProcess.processTransferAskForConfirmationAndOverrideRecent(transfer.build(), recentTransfer.get());
 				
 			} else {					
-				transfer.status(TransferStatus.COMPLETED);
+				transfer.status(TransferStatusEnum.COMPLETED);
 				return transferProcess.processTransferOverrideRecentTransfer(transfer.build(), recentTransfer.get());
 			}
 			
 		} else {	
 			logger.info("recent account not found");
 			if(amount.compareTo(new BigDecimal(1000)) > 0) {
-				transfer.status(TransferStatus.PENDING_CONFIRMATION);
+				transfer.status(TransferStatusEnum.PENDING_CONFIRMATION);
 				return transferProcess.processTransferAskForConfirmation(transfer.build());
 			
 			} else {					
-				transfer.status(TransferStatus.COMPLETED);
+				transfer.status(TransferStatusEnum.COMPLETED);
 				return transferProcess.processTransferHasFunds(transfer.build());
 			}
 		}
 		
 	}
 
-	private TransferResult validatefaulureCondition(Account sourceAccount, Account recipientAccount, BigDecimal amount) {
-		
-		TransferResult answer = null;		
+	private TransferResult validatefaulureCondition(Account sourceAccount, Account recipientAccount, BigDecimal amount) {		
 		
 			if(sourceAccount.getBalance().compareTo(amount) <= 0) {
 			
-			if(!sourceAccount.isHasCredit()) {
-				answer = transferResultProcess.getFailureOutput(MessageStrings.ERROR_TRANSFER_NOT_POSSIBLE,					
-						MessageStrings.ERROR_NOT_APPROVED_NEEDS_CREDITCARD, recipientAccount.getAccountNumber());
-			} else {				
-				if(sourceAccount.getBalance().add(sourceAccount.getCredit()).compareTo(amount) < 0) {
-					answer = transferResultProcess.getFailureOutput(MessageStrings.ERROR_TRANSFER_NOT_POSSIBLE,					
-							MessageStrings.ERROR_NOT_APPROVED_NO_FUNDS_CREDIT, recipientAccount.getAccountNumber());
-				}						
-			}			
-		}
-			return answer;
+			if(sourceAccount.isHasCredit()) {
+				if((sourceAccount.getBalance().add(sourceAccount.getCredit()).compareTo(amount) < 0)) {
+					return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_POSSIBLE,					
+							MessageStringsEnum.ERROR_NOT_APPROVED_NO_FUNDS_CREDIT, recipientAccount.getAccountNumber());
+				} else {
+					return null;
+				}
+			} else {
+				return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_POSSIBLE,					
+						MessageStringsEnum.ERROR_NOT_APPROVED_NEEDS_CREDITCARD, recipientAccount.getAccountNumber());
+			} 
+		} else {
+			return null;
+		}			 
 	}
 	
 	private TransferBuilder getNewTransfer(Account source, Account recipient, BigDecimal amount) {
 		
 		TransferBuilder transfer =  
 				Transfer.builder()
-				.sourceAccount(source.getAccountNumber())
-				.recipientAccount(recipient.getAccountNumber())
+				.sourceAccount(source)
+				.recipientAccount(recipient)
 				.amount(amount)					
 				.transferDate(LocalDateTime.now());
 		
@@ -120,5 +119,3 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 	}
 	
 }
-
-

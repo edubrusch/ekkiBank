@@ -17,7 +17,7 @@ public class Favoured {
 	
 	private String name;
 	
-	private String documentID;
+	private String document;
 	
 	private String bank;
 	

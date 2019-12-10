@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.eduardo.ekki.ekkiTransfer.common.TransferStatusEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "transfer")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,25 +28,22 @@ public class Transfer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long transferID;
 	
-	@NotNull
-	private String sourceAccount;
+	@ManyToOne	
+	@JoinColumn(name = "idSourceAccount")
+	private Account sourceAccount;
 	
-	@NotNull
-	private String recipientAccount;
-	
-	@NotNull
+	@ManyToOne	
+	@JoinColumn(name = "idRecipientAccount")
+	private Account recipientAccount;
+		
 	private BigDecimal amount;
-	
-	@NotNull
+		
 	private BigDecimal drawBalance;
-	
-	@NotNull
+		
 	private BigDecimal drawCredit;
-	
-	@NotNull
-	private TransferStatus status;
-	
-	@NotNull
+		
+	private TransferStatusEnum status;
+		
 	private LocalDateTime transferDate;	
 	
 	private String previousTransferID;

@@ -7,6 +7,6 @@ import com.eduardo.ekki.ekkiTransfer.service.result.AccountBalanceResult;
 @Service
 public interface AccountBalanceService {
 	
-	AccountBalanceResult accountBalance(String accountID);
+	AccountBalanceResult accountBalance(long accountID);
 
 }

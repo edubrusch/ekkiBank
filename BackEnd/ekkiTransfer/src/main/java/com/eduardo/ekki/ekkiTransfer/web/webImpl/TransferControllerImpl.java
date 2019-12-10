@@ -28,7 +28,7 @@ public class TransferControllerImpl implements TransferController {
 	
 	@Override
 	@GetMapping(value = "/balance/{id}")
-	public ResponseEntity<AccountBalanceResult> accountBalance(@PathVariable("id") String accountID) {
+	public ResponseEntity<AccountBalanceResult> accountBalance(@PathVariable("id") long accountID) {
 		
 		AccountBalanceResult resultAccount = accountBalanceService.accountBalance(accountID);		
 		return new ResponseEntity<>(resultAccount, HttpStatus.OK);		
@@ -39,6 +39,13 @@ public class TransferControllerImpl implements TransferController {
 	public ResponseEntity<TransferResult> transferCash(@RequestBody TransferRequest body) {
 		
  		TransferResult resultTransfer = transferService.transferCash(body.getSourceAccount(), body.getRecipientAccount(), body.getAmount());
+		
+		return new ResponseEntity<>(resultTransfer, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<TransferResult> confirmTransfer(long transferID) {
+		TransferResult resultTransfer = transferService.confirmTransfer(transferID);
 		
 		return new ResponseEntity<>(resultTransfer, HttpStatus.OK);
 	}

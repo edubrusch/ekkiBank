@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TransferRequest {
 	
-	private String sourceAccount;
-	private String recipientAccount;
+	private long sourceAccount;
+	private long recipientAccount;
 	private BigDecimal amount;
 
 }

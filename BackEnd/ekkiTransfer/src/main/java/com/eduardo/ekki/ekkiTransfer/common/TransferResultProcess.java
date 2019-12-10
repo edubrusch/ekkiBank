@@ -2,12 +2,13 @@ package com.eduardo.ekki.ekkiTransfer.common;
 
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
+import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult.TransferResultBuilder;
 
 public class TransferResultProcess{
 	
-	public TransferResult getFailureOutput(MessageStrings reason, MessageStrings cause, String acccount) {
+	public TransferResult getFailureOutput(MessageStringsEnum reason, MessageStringsEnum cause, long account) {
 		
-		String message = String.format(reason.get(), acccount) + " " + reason.get();
+		String message = String.format(reason.get(), account) + " " + String.format(cause.get(), account);
 
 		return TransferResult
 				.builder()
@@ -16,19 +17,31 @@ public class TransferResultProcess{
 				.build();
 	}
 
-	public TransferResult getSuccessfulOutput(MessageStrings reason, Transfer transfer) {
+	public TransferResult getSuccessfulOutput(MessageStringsEnum reason, Transfer transfer) {
 		
 		String message = String.format(reason.get(),
-				transfer.getSourceAccount(),
-				transfer.getRecipientAccount(),
+				transfer.getSourceAccount().getAccountNumber(),
+				transfer.getRecipientAccount().getAccountNumber(),
 				transfer.getAmount());
 		
-		return TransferResult
-				.builder()
+		TransferResultBuilder output =  TransferResult.builder()
 				.sucess(true)
-				.message(message)
-				.transfer(transfer)
-				.build();
+				.message(message)				
+				.sourceAccount(transfer.getSourceAccount().getAccountNumber())
+				.recipientAccount(transfer.getRecipientAccount().getAccountNumber())
+				.amount(transfer.getAmount())
+				.drawBalance(transfer.getDrawBalance())
+				.drawCredit(transfer.getDrawCredit())
+				.status(transfer.getStatus())
+				.transferDate(transfer.getTransferDate());
+		
+		if(transfer.getPreviousTransferID() == null) {
+			output.previousTransferID("No previous transfer");
+		} else {
+			output.previousTransferID(transfer.getPreviousTransferID());
+		}		
+		
+		return output.build();
 	}
 
 }

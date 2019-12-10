@@ -7,71 +7,67 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.eduardo.ekki.ekkiTransfer.common.MessageStrings;
+import com.eduardo.ekki.ekkiTransfer.common.MessageStringsEnum;
+import com.eduardo.ekki.ekkiTransfer.common.TransferResultProcess;
+import com.eduardo.ekki.ekkiTransfer.common.TransferStatusEnum;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
-import com.eduardo.ekki.ekkiTransfer.entity.TransferStatus;
 import com.eduardo.ekki.ekkiTransfer.repository.AccountRepository;
 import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferProcessService;
-import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 @Service
 @Transactional
 public class TransferProcessServiceImpl implements TransferProcessService{
-	
-	
-	private final AccountRepository accountRepository;	
-	
-	private TransferRepository transferRepository;		
-	
-	private TransferResultProcessService transferResultProcess;
-	
+		
+	private final AccountRepository accountRepository;		
+	private TransferRepository transferRepository;			
+	private TransferResultProcess transferResultProcess;	
 	
 	@Autowired
-	public TransferProcessServiceImpl(AccountRepository accountRepository, TransferRepository transferRepository, 
-			TransferResultProcessService transferResultProcess) {
+	public TransferProcessServiceImpl(AccountRepository accountRepository, TransferRepository transferRepository) {
 		
 		this.accountRepository = accountRepository;
 		this.transferRepository = transferRepository;
-		this.transferResultProcess = transferResultProcess;
-	}
-	
+		this.transferResultProcess = new TransferResultProcess();
+	}	
 	
 	@Override	
 	public TransferResult processTransferHasFunds(Transfer transfer) {		
 		
 		transferAccount(transfer);		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
+		if(transfer.getDrawCredit().compareTo(new BigDecimal(0)) > 0) {
+			return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.SUCCESS_APPROVED_USED_CREDICART_LOAM, transfer);
+		}
+		return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.SUCCESS_TRANSFER_ACCOUNT, transfer);
 	}
 
 	@Override	
 	public TransferResult processTransferOverrideRecentTransfer(Transfer transfer, Transfer previousTransfer) {
 		
-		previousTransfer.setStatus(TransferStatus.CANCELED_OVERRIDEN);		
+		previousTransfer.setStatus(TransferStatusEnum.CANCELED_OVERRIDEN);		
 		transferRepository.save(previousTransfer);
 		transferRepository.save(transfer);
 		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_OVERRIDE_RECENT_TRANSACTION, transfer);
+		return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.APPROVED_OVERRIDE_RECENT_TRANSACTION, transfer);
 	}
 	
 
 	@Override	
 	public TransferResult processTransferAskForConfirmation(Transfer transfer) {
-		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_NOT_COMPLETED, transfer);
+		transferRepository.save(transfer);
+		return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.APPROVED_NOT_COMPLETED, transfer);
 	}
 
-
 	@Override	
-	public TransferResult processTransferAskForConfirmationAndOverrideRecent(Transfer transfer, Transfer previousTransfer) {			
+	public TransferResult processTransferAskForConfirmationAndOverrideRecent(Transfer transfer, Transfer previousTransfer) {
 		
-		previousTransfer.setStatus(TransferStatus.CANCELED_OVERRIDEN);		
+		previousTransfer.setStatus(TransferStatusEnum.CANCELED_OVERRIDEN);		
 		transferRepository.save(previousTransfer);
 		transferRepository.save(transfer);
 		
-		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_NOT_COMPLETED, transfer);		
+		return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.APPROVED_NOT_COMPLETED, transfer);
 	}
 	
 	
@@ -81,20 +77,20 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		Optional<Transfer> transfer = transferRepository.findByTransferID(transferID);
 		
 		if(transfer.isPresent()) {		
-			transfer.get().setStatus(TransferStatus.COMPLETED);
+			transfer.get().setStatus(TransferStatusEnum.COMPLETED);
 			transferRepository.save(transfer.get());
-			return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_CONFIRM_TRANSFER, transfer.get());
+			return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.SUCCESS_CONFIRM_TRANSFER, transfer.get());
 			
 		}else {			
-			return transferResultProcess.getFailureOutput(MessageStrings.ERROR_TRANSFER_NOT_COMPLETED, MessageStrings.ERROR_TRANSFER_NOT_FOUND, "");
+			return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_COMPLETED, MessageStringsEnum.ERROR_TRANSFER_NOT_FOUND, 0);
 		}
 		
-	}	
+	}
 
 	private void transferAccount(Transfer transferData) {
 		
-		Optional<Account> source = accountRepository.findAccountByAccountNumber(transferData.getSourceAccount());
-		Optional<Account> recipient = accountRepository.findAccountByAccountNumber(transferData.getRecipientAccount());			
+		Optional<Account> source = accountRepository.findAccountByAccountNumber(transferData.getSourceAccount().getAccountNumber());
+		Optional<Account> recipient = accountRepository.findAccountByAccountNumber(transferData.getRecipientAccount().getAccountNumber());			
 		
 		BigDecimal balanceFinalSource = source.get().getBalance().subtract(transferData.getDrawBalance());
 		BigDecimal balanceFinalCreditSource = source.get().getCredit().subtract(transferData.getDrawCredit());		

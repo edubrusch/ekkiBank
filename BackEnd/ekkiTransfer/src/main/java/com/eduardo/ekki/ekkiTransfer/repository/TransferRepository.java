@@ -13,16 +13,20 @@ public interface TransferRepository extends JpaRepository<Transfer, Query> {
 
 	@Query(value = 
 			"Select top 1 t.*"
-			+ " from transfer t"	
-			+ " where t.source_account = ?1"
-			+ " and t.recipient_account = ?2"
+			+ " from transfer t"
+			+ " inner join account s"
+			+ " on s.id_Account = t.id_source_account"
+			+ " inner join account r"
+			+ " on r.id_Account = t.id_recipient_account"	
+			+ " where s.account_number = ?1"
+			+ " and r.account_number = ?2"
 			+ " and t.amount = ?3"
 			+ " and (TIMESTAMPDIFF (MINUTE, t.transfer_date, LOCALTIMESTAMP)) < 2"
 			+ " order by t.transfer_date desc"
 			, nativeQuery = true)
 	public Optional<Transfer> find(
-			String sourceAccount,
-			String recipientAccount,
+			long sourceAccount,
+			long recipientAccount,
 			BigDecimal amount
 			);
 	

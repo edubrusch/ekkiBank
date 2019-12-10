@@ -1,6 +1,6 @@
 package com.eduardo.ekki.ekkiTransfer.common;
 
-public enum MessageStrings {
+public enum MessageStringsEnum {
 	
 	ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT("Account number %s was not found."),
 	ERROR_TRANSFER_NOT_COMPLETED("Transfer not complete for account %s."),
@@ -23,12 +23,12 @@ public enum MessageStrings {
 	SUCCESS_ACCOUNT_FOUND("Account number %s was found."),
 	SUCCESS_NEEDS_CONFIRMATION("Transfer is over the safe limit, please confirm the transaction"),
 	SUCCESS_TRANSFER_ACCOUNT("Transfer success. Transfered from account %s to accont %s value of %s"),
-	SUCCESS_CONFIRM_TRANSFER("Transfer success. Transfered from account %s to accont %s value of %s"),
-	SUCCESS_APPROVED_USED_CREDICART_LOAM("Transfer automatically used funds from user's credit card due to lack in the funds of the user's account.");
+	SUCCESS_CONFIRM_TRANSFER("Transfer confirmation successful. Transfered from account %s to accont %s value of %s"),
+	SUCCESS_APPROVED_USED_CREDICART_LOAM("Transfer success. Transfered from account %s to accont %s value of %s . Transfer automatically used funds from the user's credit due to the lack of funds of the user's account.");
 	
 	private String value;
 	
-	private MessageStrings(String message) {
+	private MessageStringsEnum(String message) {
 		value = message;
 	}
 	

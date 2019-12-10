@@ -8,8 +8,10 @@ import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 public interface TransferController {	
 
-	ResponseEntity<AccountBalanceResult> accountBalance(String accountID);
+	ResponseEntity<AccountBalanceResult> accountBalance(long accountID);
 	
 	ResponseEntity<TransferResult> transferCash(TransferRequest body);
+	
+	ResponseEntity<TransferResult> confirmTransfer(long transferID);
 
 }
