@@ -52,6 +52,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		
 		previousTransfer.setStatus(TransferStatus.CANCELED_OVERRIDEN);		
 		transferRepository.save(previousTransfer);
+		transferRepository.save(transfer);
 		
 		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_OVERRIDE_RECENT_TRANSACTION, transfer);
 	}
@@ -71,6 +72,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		
 		previousTransfer.setStatus(TransferStatus.CANCELED_OVERRIDEN);		
 		transferRepository.save(previousTransfer);
+		transferRepository.save(transfer);
 		
 		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_NOT_COMPLETED, transfer);		
 	}

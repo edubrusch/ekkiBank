@@ -1,10 +1,13 @@
 package com.eduardo.ekki.ekkiTransfer.service.impl;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +28,7 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 	private final TransferRepository transferRepository;
 	private final TransferResultProcessService transferResultProcess;
 	private final TransferProcessService transferProcess;
-	
+	Logger logger = LoggerFactory.getLogger("FILE");
 	
 	@Autowired
 	public TransferValidationServiceImpl(TransferRepository transferRepository,
@@ -48,8 +51,8 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 		
 		TransferBuilder transfer = getNewTransfer(sourceAccount, recipientAccount, amount);
 		
-		Optional<Transfer> recentTransfer = transferRepository.find(sourceAccount.getAccountNumber(),
-				recipientAccount.getAccountNumber(), LocalDateTime.now().minus(2, ChronoUnit.MINUTES), amount);
+		Optional<Transfer> recentTransfer = transferRepository.find(sourceAccount.getAccountNumber(), 
+				recipientAccount.getAccountNumber(), amount/*, Timestamp.valueOf(LocalDateTime.now().minus(2, ChronoUnit.MINUTES))*/);
 		
 		if(recentTransfer.isPresent()) {
 			
@@ -64,7 +67,8 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 				return transferProcess.processTransferOverrideRecentTransfer(transfer.build(), recentTransfer.get());
 			}
 			
-		} else {				
+		} else {	
+			logger.info("recent account not found");
 			if(amount.compareTo(new BigDecimal(1000)) > 0) {
 				transfer.status(TransferStatus.PENDING_CONFIRMATION);
 				return transferProcess.processTransferAskForConfirmation(transfer.build());
