@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "transfer_history")
+@Table(name = "transfer")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,19 +27,26 @@ public class Transfer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long transferID;
 	
+	@NotNull
 	private String sourceAccount;
 	
+	@NotNull
 	private String recipientAccount;
 	
+	@NotNull
 	private BigDecimal amount;
 	
+	@NotNull
 	private BigDecimal drawBalance;
 	
+	@NotNull
 	private BigDecimal drawCredit;
 	
+	@NotNull
 	private TransferStatus status;
 	
-	private LocalDateTime transferDate;
+	@NotNull
+	private LocalDateTime transferDate;	
 	
 	private String previousTransferID;
 	

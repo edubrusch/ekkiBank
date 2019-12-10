@@ -1,16 +1,10 @@
-package com.eduardo.ekki.ekkiTransfer.service.impl;
+package com.eduardo.ekki.ekkiTransfer.common;
 
-import org.springframework.stereotype.Service;
-
-import com.eduardo.ekki.ekkiTransfer.common.MessageStrings;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
-import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
-@Service
-public class TransferResultProcessServiceImpl implements TransferResultProcessService {
-
-	@Override
+public class TransferResultProcess{
+	
 	public TransferResult getFailureOutput(MessageStrings reason, MessageStrings cause, String acccount) {
 		
 		String message = String.format(reason.get(), acccount) + " " + reason.get();
@@ -22,7 +16,6 @@ public class TransferResultProcessServiceImpl implements TransferResultProcessSe
 				.build();
 	}
 
-	@Override
 	public TransferResult getSuccessfulOutput(MessageStrings reason, Transfer transfer) {
 		
 		String message = String.format(reason.get(),

@@ -13,7 +13,7 @@ public interface TransferRepository extends JpaRepository<Transfer, Query> {
 
 	@Query(value = 
 			"Select top 1 t.*"
-			+ " from transfer_history t"	
+			+ " from transfer t"	
 			+ " where t.source_account = ?1"
 			+ " and t.recipient_account = ?2"
 			+ " and t.amount = ?3"
@@ -26,6 +26,6 @@ public interface TransferRepository extends JpaRepository<Transfer, Query> {
 			BigDecimal amount
 			);
 	
-	public Optional<Transfer> findByTransferID(String transferID);
+	public Optional<Transfer> findByTransferID(long transferID);
 	
 }

@@ -1,9 +1,7 @@
 package com.eduardo.ekki.ekkiTransfer.service.impl;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eduardo.ekki.ekkiTransfer.common.MessageStrings;
+import com.eduardo.ekki.ekkiTransfer.common.TransferResultProcess;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 import com.eduardo.ekki.ekkiTransfer.entity.Transfer.TransferBuilder;
 import com.eduardo.ekki.ekkiTransfer.entity.TransferStatus;
 import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferProcessService;
-import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
@@ -26,13 +24,13 @@ import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 public class TransferValidationServiceImpl implements TransferValidationService {
 	
 	private final TransferRepository transferRepository;
-	private final TransferResultProcessService transferResultProcess;
+	private TransferResultProcess transferResultProcess;
 	private final TransferProcessService transferProcess;
 	Logger logger = LoggerFactory.getLogger("FILE");
 	
 	@Autowired
 	public TransferValidationServiceImpl(TransferRepository transferRepository,
-			TransferResultProcessService transferResultProcess,
+			TransferResultProcess transferResultProcess,
 			TransferProcessService transferProcess) {
 		
 		this.transferRepository = transferRepository;

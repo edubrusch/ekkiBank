@@ -18,6 +18,7 @@ import com.eduardo.ekki.ekkiTransfer.service.TransferResultProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 @Service
+@Transactional
 public class TransferProcessServiceImpl implements TransferProcessService{
 	
 	
@@ -38,16 +39,14 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 	}
 	
 	
-	@Override
-	@Transactional
+	@Override	
 	public TransferResult processTransferHasFunds(Transfer transfer) {		
 		
 		transferAccount(transfer);		
 		return transferResultProcess.getSuccessfulOutput(MessageStrings.SUCCESS_TRANSFER_ACCOUNT, transfer);
 	}
 
-	@Override
-	@Transactional
+	@Override	
 	public TransferResult processTransferOverrideRecentTransfer(Transfer transfer, Transfer previousTransfer) {
 		
 		previousTransfer.setStatus(TransferStatus.CANCELED_OVERRIDEN);		
@@ -58,16 +57,14 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 	}
 	
 
-	@Override
-	@Transactional
+	@Override	
 	public TransferResult processTransferAskForConfirmation(Transfer transfer) {
 		
 		return transferResultProcess.getSuccessfulOutput(MessageStrings.APPROVED_NOT_COMPLETED, transfer);
 	}
 
 
-	@Override
-	@Transactional
+	@Override	
 	public TransferResult processTransferAskForConfirmationAndOverrideRecent(Transfer transfer, Transfer previousTransfer) {			
 		
 		previousTransfer.setStatus(TransferStatus.CANCELED_OVERRIDEN);		
@@ -78,9 +75,8 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 	}
 	
 	
-	@Override
-	@Transactional
-	public TransferResult processTransferConfirmation(String transferID) {
+	@Override	
+	public TransferResult processTransferConfirmation(long transferID) {
 		
 		Optional<Transfer> transfer = transferRepository.findByTransferID(transferID);
 		
