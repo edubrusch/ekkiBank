@@ -1,10 +1,10 @@
 # ekkiBank
 
- Desafio Tecnológico Phi / 4All para desenvolvedores.
+Desafio Tecnológico Phi / 4All para desenvolvedores.
 
- Com interesse de desempenhar o papel de desenvolvedor Java Backend no Squad Processamenteo da PHi, foi desenvolvido este programa, para demonstrar conhecimento em desenvolvimento Java e frameworks necessários para exercer a função.
+Com interesse de desempenhar o papel de desenvolvedor Java Backend no Squad Processamenteo da PHi, foi desenvolvido este programa, para demonstrar conhecimento em desenvolvimento Java e frameworks necessários para exercer a função.
 
- Foi preparada a estrutura de pastas para criar todos os componentes (Backend, FrontEnd) porém o foco desta Demonstração será o backend, excluindo a construção do BFF.
+Foi preparada a estrutura de pastas para criar todos os componentes (Backend, FrontEnd) porém o foco desta Demonstração será o backend, excluindo a construção do BFF.
 
 ## Tecnologias
 
@@ -52,18 +52,14 @@ As funcionalidades Implementadas:
 * CRUD de contatos/favorecidos.
 * Transferência de dinheiro entre usuários.
 
-### implementação dos serviços
+### Implementação dos serviços
 
-Os CRUDS de favorecido e cartão de crédito foram criados com a ajuda da anotação _@RepositoryRestResource_ do pacote  _org.springframework.data_ Esta anotação permite criar de uma vez só todo o CRUD para uma determinada entity.
-O CRUD vem no formato HATEOAS, que possui links de referência. Neste momento foi tomada a decisão de manter o formato HATEOAS apenas para estes CRUDS, pois seria necessario mais tempo para personalizar os CRUDS removendo os links 
-ou alterando os demais serviços para implementar o padrão. Desta forma, foi decidido que pelo menos todo objeto retornaria um objeto customizado de resposta, com informações relevantes.
-Assim ficaria mais fácil terminar implementação do HATEOAS no futuro. Esta decisão foi tomada tendo em vista a praticidade e diminuição do tempo de desenvolvimento.
+Os CRUDS de favorecido e cartão de crédito foram criados com a ajuda da anotação _@RepositoryRestResource_ do pacote  _org.springframework.data_ Esta anotação permite criar de uma vez só todo o CRUD para uma determinada entity. O CRUD vem no formato HATEOAS, que possui links de referência. Neste momento foi tomada a decisão de manter o formato HATEOAS apenas para estes CRUDS, pois seria necessario mais tempo para personalizar os CRUDS removendo os links ou alterando os demais serviços para implementar o padrão. Desta forma, foi decidido que pelo menos todo objeto retornaria um objeto customizado de resposta, com informações relevantes.Assim ficaria mais fácil terminar implementação do HATEOAS no futuro. Esta decisão foi tomada tendo em vista a praticidade e diminuição do tempo de desenvolvimento.
 
-### escolha do banco de dados
+### Escolha do banco de dados
 
-Da mesma forma foi orientado a escolha do banco de dados. o H2 é um banco de dados que é carregado em memória, elimininando portanto a necessidade de criar um bando ce dados em um servidor para executar o projeto. 
-Se fosse adotar outro banco de dados, bastaria alterar as configurações no arquivo _application.properties_
+Da mesma forma foi orientado a escolha do banco de dados. o H2 é um banco de dados que é carregado em memória, elimininando portanto a necessidade de criar um bando ce dados em um servidor para executar o projeto. Se fosse adotar outro banco de dados, bastaria alterar as configurações no arquivo _application.properties_
 
-### logs
+### Logs
 
 Para ajudar na implementação foi configurado o logback com duas saidas: saída para o SYSOUT e para um arquivo na raiz do projeto. Foi utilizado durante o desenvolvimento porém no momento não há nenhum log sendo exibido.
