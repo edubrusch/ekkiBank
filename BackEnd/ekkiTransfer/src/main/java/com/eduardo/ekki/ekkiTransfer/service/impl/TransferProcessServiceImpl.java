@@ -68,8 +68,7 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 		transferRepository.save(transfer);
 		
 		return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.APPROVED_NOT_COMPLETED, transfer);
-	}
-	
+	}	
 	
 	@Override	
 	public TransferResult processTransferConfirmation(Transfer transfer) {

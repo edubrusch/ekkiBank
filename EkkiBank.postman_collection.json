@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "8a884598-504b-4076-89b6-3424af5c5cbd",
+		"name": "EkkiBank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Credit card",
+			"item": [
+				{
+					"name": "credit card info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}:8080/creditCards",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"creditCards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "include credit card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"serial\": \"45267898736546454654654\",\n  \"titularName\": \"Eduardo B. B.\",\n  \"dueDate\": \"12/23\",\n  \"acountNumber\": \"987654321\",\n  \"cvv\": 251\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}:8080/creditCards",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"creditCards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove credit card",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}:8080/creditCards/<id>",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"creditCards",
+								"<id>"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "account Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}:8080/balance/<account>",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"balance",
+								"<account>"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "transfer",
+			"item": [
+				{
+					"name": "transferAccount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"sourceAccount\":\"524756\",\n\t\"recipientAccount\":\"526546\",\n\t\"amount\":200.10\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}:8080/transfer",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Favoured",
+			"item": [
+				{
+					"name": "Favoured info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}:8080/favoureds",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"favoureds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Include favoured",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Favorecido Claber\",\n    \"document\": \"98654654\",\n    \"bank\": \"001\",\n    \"acountNumber\": \"1354989\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}:8080/favoureds",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"favoureds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove favoured",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}:8080/favoureds/<ID>",
+							"host": [
+								"{{localhost}}"
+							],
+							"port": "8080",
+							"path": [
+								"favoureds",
+								"<ID>"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

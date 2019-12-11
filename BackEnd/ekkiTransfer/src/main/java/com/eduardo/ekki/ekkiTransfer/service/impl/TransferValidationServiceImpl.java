@@ -63,8 +63,7 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 				return transferProcess.processTransferOverrideRecentTransfer(transfer.build(), recentTransfer.get());
 			}
 			
-		} else {	
-			logger.info("recent account not found");
+		} else {
 			if(amount.compareTo(new BigDecimal(1000)) > 0) {
 				transfer.status(TransferStatusEnum.PENDING_CONFIRMATION);
 				return transferProcess.processTransferAskForConfirmation(transfer.build());
@@ -84,13 +83,13 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 			if(sourceAccount.isHasCredit()) {
 				if((sourceAccount.getBalance().add(sourceAccount.getCredit()).compareTo(amount) < 0)) {
 					return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_POSSIBLE,					
-							MessageStringsEnum.ERROR_NOT_APPROVED_NO_FUNDS_CREDIT, recipientAccount.getAccountNumber());
+							MessageStringsEnum.ERROR_NOT_APPROVED_NO_FUNDS_CREDIT, sourceAccount.getAccountNumber());
 				} else {
 					return null;
 				}
 			} else {
 				return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_POSSIBLE,					
-						MessageStringsEnum.ERROR_NOT_APPROVED_NEEDS_CREDITCARD, recipientAccount.getAccountNumber());
+						MessageStringsEnum.ERROR_NOT_APPROVED_NEEDS_CREDITCARD, sourceAccount.getAccountNumber());
 			} 
 		} else {
 			return null;
