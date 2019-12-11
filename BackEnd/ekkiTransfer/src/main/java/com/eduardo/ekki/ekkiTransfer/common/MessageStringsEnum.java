@@ -2,11 +2,12 @@ package com.eduardo.ekki.ekkiTransfer.common;
 
 public enum MessageStringsEnum {
 	
-	ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT("Account number %s was not found."),
+	ERROR_ACCOUNT_NOT_FOUND_PARAM_ACCOUNT("Account number %s was not found."),	
 	ERROR_TRANSFER_NOT_COMPLETED("Transfer not complete for account %s."),
 	ERROR_TRANSFER_SOURCE_ACCOUNT_NOT_FOUND("Source account not found for transfer."),
 	ERROR_TRANSFER_RECIPIENT_ACCOUNT_NOT_FOUND("Recipient account not found for transfer."),	
 	ERROR_TRANSFER_NOT_FOUND("Transfer submitted for confirmation was not found"),
+	ERROR_TRANSFER_INVALID("submitted transfer cennot be processed. "),
 	ERROR_TRANSFER_ERROR("Error Initializing transfer. Please contact the development with this message."),	
 	
 	ERROR_TRANSFER_NOT_POSSIBLE("Transfer is not possible to be completed to account %s."),

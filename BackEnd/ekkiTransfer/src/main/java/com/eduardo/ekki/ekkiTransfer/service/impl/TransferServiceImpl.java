@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.eduardo.ekki.ekkiTransfer.common.MessageStringsEnum;
 import com.eduardo.ekki.ekkiTransfer.common.TransferResultProcess;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
+import com.eduardo.ekki.ekkiTransfer.entity.Transfer;
 import com.eduardo.ekki.ekkiTransfer.repository.AccountRepository;
+import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
 import com.eduardo.ekki.ekkiTransfer.service.TransferService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
@@ -19,15 +21,18 @@ public class TransferServiceImpl implements TransferService{
 	
 	private final AccountRepository accountRepository;	
 	private final TransferValidationService transferValidation;	
-	private final TransferResultProcess transferResultProcess;	
+	private final TransferResultProcess transferResultProcess;
+	private final TransferRepository transferRepository;
+	
 	
 	@Autowired
 	public TransferServiceImpl(AccountRepository accountRepository,
-			TransferValidationService transferValidation) {
+			TransferValidationService transferValidation, TransferRepository transferRepository) {
 				
 		this.accountRepository = accountRepository;
 		this.transferValidation = transferValidation;		
 		this.transferResultProcess = new TransferResultProcess();	
+		this.transferRepository = transferRepository;
 	}	
 
 	@Override
@@ -53,7 +58,14 @@ public class TransferServiceImpl implements TransferService{
 	@Override
 	public TransferResult confirmTransfer(long transactionID) {
 		
-		return null;
+		Optional<Transfer> transferSearch = transferRepository.findByTransferID(transactionID);
+		
+		if(!transferSearch.isPresent()) {
+			return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_FOUND,
+					MessageStringsEnum.ERROR_TRANSFER_NOT_FOUND, transactionID);
+		}
+		
+		return  transferValidation.validateTransferConfirm(transferSearch.get());		
 	}
 
 }

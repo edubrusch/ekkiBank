@@ -72,19 +72,11 @@ public class TransferProcessServiceImpl implements TransferProcessService{
 	
 	
 	@Override	
-	public TransferResult processTransferConfirmation(long transferID) {
-		
-		Optional<Transfer> transfer = transferRepository.findByTransferID(transferID);
-		
-		if(transfer.isPresent()) {		
-			transfer.get().setStatus(TransferStatusEnum.COMPLETED);
-			transferRepository.save(transfer.get());
-			return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.SUCCESS_CONFIRM_TRANSFER, transfer.get());
-			
-		}else {			
-			return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_COMPLETED, MessageStringsEnum.ERROR_TRANSFER_NOT_FOUND, 0);
-		}
-		
+	public TransferResult processTransferConfirmation(Transfer transfer) {
+		transferAccount(transfer);		
+		transfer.setStatus(TransferStatusEnum.COMPLETED);
+		transferRepository.save(transfer);
+		return transferResultProcess.getSuccessfulOutput(MessageStringsEnum.SUCCESS_CONFIRM_TRANSFER, transfer);
 	}
 
 	private void transferAccount(Transfer transferData) {

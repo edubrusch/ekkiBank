@@ -16,6 +16,6 @@ public interface TransferProcessService {
 	
 	TransferResult processTransferAskForConfirmationAndOverrideRecent(Transfer transfer, Transfer previousTransfer);	
 	
-	TransferResult processTransferConfirmation(long transferID);
+	TransferResult processTransferConfirmation(Transfer transfer);
 	
 }

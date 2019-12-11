@@ -117,5 +117,14 @@ public class TransferValidationServiceImpl implements TransferValidationService 
 		
 		return transfer;
 	}
+
+	@Override
+	public TransferResult validateTransferConfirm(Transfer transfer) {
+		
+		if(transfer.getStatus().equals(TransferStatusEnum.PENDING_CONFIRMATION))
+			return  transferProcess.processTransferConfirmation(transfer);	
+		
+		return transferResultProcess.getFailureOutput(MessageStringsEnum.ERROR_TRANSFER_NOT_COMPLETED, MessageStringsEnum.ERROR_TRANSFER_NOT_FOUND, 0);
+	}
 	
 }

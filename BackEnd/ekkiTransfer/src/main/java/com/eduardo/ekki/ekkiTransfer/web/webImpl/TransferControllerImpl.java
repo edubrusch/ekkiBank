@@ -6,9 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eduardo.ekki.ekkiTransfer.service.AccountBalanceService;
+import com.eduardo.ekki.ekkiTransfer.service.TransferService;
 import com.eduardo.ekki.ekkiTransfer.service.impl.AccountBalanceServiceImpl;
 import com.eduardo.ekki.ekkiTransfer.service.impl.TransferServiceImpl;
 import com.eduardo.ekki.ekkiTransfer.service.request.TransferRequest;
@@ -19,12 +22,15 @@ import com.eduardo.ekki.ekkiTransfer.web.TransferController;
 @RestController
 public class TransferControllerImpl implements TransferController {
 	
-	@Autowired
-	private AccountBalanceServiceImpl accountBalanceService;
+	
+	private final AccountBalanceService accountBalanceService;
+	private final TransferService transferService;
 	
 	@Autowired
-	private TransferServiceImpl transferService;
-
+	public TransferControllerImpl(AccountBalanceServiceImpl accountBalanceService, TransferServiceImpl transferService) {
+		this.accountBalanceService = accountBalanceService;
+		this.transferService = transferService;
+	}
 	
 	@Override
 	@GetMapping(value = "/balance/{id}")
@@ -44,7 +50,8 @@ public class TransferControllerImpl implements TransferController {
 	}
 
 	@Override
-	public ResponseEntity<TransferResult> confirmTransfer(long transferID) {
+	@PutMapping(value = "/transfer/{transferID}")
+	public ResponseEntity<TransferResult> confirmTransfer(@PathVariable("transferID") long transferID) {
 		TransferResult resultTransfer = transferService.confirmTransfer(transferID);
 		
 		return new ResponseEntity<>(resultTransfer, HttpStatus.OK);
