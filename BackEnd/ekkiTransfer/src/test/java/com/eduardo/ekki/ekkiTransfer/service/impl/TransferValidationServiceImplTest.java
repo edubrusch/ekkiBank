@@ -6,32 +6,37 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.eduardo.ekki.ekkiTransfer.common.MessageStringsEnum;
 import com.eduardo.ekki.ekkiTransfer.entity.Account;
 import com.eduardo.ekki.ekkiTransfer.repository.TransferRepository;
-import com.eduardo.ekki.ekkiTransfer.service.TransferProcessService;
 import com.eduardo.ekki.ekkiTransfer.service.TransferValidationService;
 import com.eduardo.ekki.ekkiTransfer.service.result.TransferResult;
 
 
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class TransferValidationServiceImplTest {
 	
-	private TransferValidationService tranferValidator;
 	private Account noCreditccount;
 	private Account hasCreditAccount;
 	
+	//@InjectMocks
+	private TransferValidationService tranferValidator;	
+	
 	@Mock
-	private TransferProcessService processService;
+	public TransferProcessServiceImpl processService;
 	
 	@Mock 
-	private TransferRepository transferRepository; 
+	public TransferRepository transferRepository; 
 	
 	@BeforeEach
 	public void prepareTest () {
+		
+		MockitoAnnotations.initMocks(this);
 		
 		hasCreditAccount = Account.builder()
 				.accountNumber(123)
@@ -45,10 +50,9 @@ public class TransferValidationServiceImplTest {
 				.hasCredit(false)
 				.credit(new BigDecimal(0))
 				.build();
-		
 		tranferValidator = new TransferValidationServiceImpl(transferRepository, processService);
 	}
-
+	
 	
 	@Test
 	public void shouldFailNoFundsProcessTransfer() {
